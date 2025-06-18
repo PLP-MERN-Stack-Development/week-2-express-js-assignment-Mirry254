@@ -1,71 +1,29 @@
-// server.js - Starter Express server for Week 2 assignment
-
-// Import required modules
+console.log("Step 1: Requiring express...");
 const express = require('express');
-const bodyParser = require('body-parser');
-const { v4: uuidv4 } = require('uuid');
 
-// Initialize Express app
+console.log("Step 2: Creating app...");
 const app = express();
+
+console.log("Step 3: Loading dotenv...");
+require('dotenv').config();
+
+console.log("Step 4: Requiring middleware...");
+const logger = require('./middleware/logger');
+
+console.log("Step 5: Requiring routes...");
+const productRoutes = require('./routes/productRoutes');
+
+console.log("Step 6: Using express.json()...");
+app.use(express.json());
+
+console.log("Step 7: Using logger middleware...");
+app.use(logger);
+
+console.log("Step 8: Using product routes...");
+app.use('/api/products', productRoutes);
+
+console.log("Step 9: Starting server...");
 const PORT = process.env.PORT || 3000;
-
-// Middleware setup
-app.use(bodyParser.json());
-
-// Sample in-memory products database
-let products = [
-  {
-    id: '1',
-    name: 'Laptop',
-    description: 'High-performance laptop with 16GB RAM',
-    price: 1200,
-    category: 'electronics',
-    inStock: true
-  },
-  {
-    id: '2',
-    name: 'Smartphone',
-    description: 'Latest model with 128GB storage',
-    price: 800,
-    category: 'electronics',
-    inStock: true
-  },
-  {
-    id: '3',
-    name: 'Coffee Maker',
-    description: 'Programmable coffee maker with timer',
-    price: 50,
-    category: 'kitchen',
-    inStock: false
-  }
-];
-
-// Root route
-app.get('/', (req, res) => {
-  res.send('Welcome to the Product API! Go to /api/products to see all products.');
-});
-
-// TODO: Implement the following routes:
-// GET /api/products - Get all products
-// GET /api/products/:id - Get a specific product
-// POST /api/products - Create a new product
-// PUT /api/products/:id - Update a product
-// DELETE /api/products/:id - Delete a product
-
-// Example route implementation for GET /api/products
-app.get('/api/products', (req, res) => {
-  res.json(products);
-});
-
-// TODO: Implement custom middleware for:
-// - Request logging
-// - Authentication
-// - Error handling
-
-// Start the server
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`✅ Server running on port ${PORT}`);
 });
-
-// Export the app for testing purposes
-module.exports = app; 
